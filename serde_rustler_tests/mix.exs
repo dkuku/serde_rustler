@@ -2,7 +2,7 @@ defmodule SerdeRustlerTests.Mixfile do
   use Mix.Project
 
   @name         :serde_rustler_tests
-  @version      "0.0.6"
+  @version      "0.0.7"
   @description  """
   """
   @github       "https://github.com/datalove-app/serde_rustler"
@@ -45,7 +45,7 @@ defmodule SerdeRustlerTests.Mixfile do
   end
 
   defp deps() do
-    [ {:rustler,        "~> 0.27.0"},
+    [ {:rustler,        "~> 0.28.0"},
     ]
   end
 

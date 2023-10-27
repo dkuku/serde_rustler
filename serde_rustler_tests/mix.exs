@@ -2,7 +2,7 @@ defmodule SerdeRustlerTests.Mixfile do
   use Mix.Project
 
   @name         :serde_rustler_tests
-  @version      "0.0.7"
+  @version      "0.0.8"
   @description  """
   """
   @github       "https://github.com/datalove-app/serde_rustler"
@@ -45,7 +45,7 @@ defmodule SerdeRustlerTests.Mixfile do
   end
 
   defp deps() do
-    [ {:rustler,        "~> 0.28.0"},
+    [ {:rustler,        "~> 0.30.0"},
     ]
   end
 
@@ -60,7 +60,7 @@ defmodule SerdeRustlerTests.Mixfile do
       {:mix_test_watch,   "~> 0.8",   only: [:dev],         runtime: false},
       # JSON serialization libs for benchmarks
       {:exjsx,            "~> 4.0",   only: [:dev, :bench]},
-      {:jason,            "~> 1.1",   only: [:dev, :test, :bench]},
+      {:jason,            "~> 1.1",   },
       {:jiffy,            "~> 1.0",   only: [:dev, :bench]},
       {:json,             "~> 1.3",   only: [:dev, :bench]},
       {:jsone,            "~> 1.4",   only: [:dev, :bench]},

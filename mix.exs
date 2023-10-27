@@ -4,7 +4,7 @@ defmodule SerdeRustler.Mixfile do
   use Mix.Project
 
   @name         :serde_rustler
-  @version      "0.0.7"
+  @version      "0.0.8"
   @description  """
   """
   @github       "https://github.com/sunny-g/serde_rustler"

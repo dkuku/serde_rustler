@@ -4,8 +4,8 @@ use crate::Error;
 use rustler::{types::atom::Atom, Encoder, Env, Term};
 
 lazy_static! {
-    pub static ref OK: String = String::from("ok");
-    pub static ref ERROR: String = String::from("error");
+    pub static ref OK: String = String::from("Ok");
+    pub static ref ERROR: String = String::from("Err");
 }
 
 rustler_atoms! {
@@ -41,6 +41,14 @@ pub fn str_to_term<'a>(env: &Env<'a>, string: &str) -> Result<Term<'a>, Error> {
  * Attempts to create a `String` from the term.
  */
 pub fn term_to_string(term: &Term) -> Result<String, Error> {
+    if term.is_atom() {
+        term.atom_to_string().or(Err(Error::InvalidAtom))
+    } else {
+        Err(Error::InvalidStringable)
+    }
+}
+
+pub fn term_to_variant_string(term: &Term) -> Result<String, Error> {
     if ok().eq(term) {
         Ok(OK.to_string())
     } else if error().eq(term) {

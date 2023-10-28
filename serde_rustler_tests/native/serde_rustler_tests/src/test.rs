@@ -13,10 +13,10 @@ use std::{collections::HashMap, fmt::Debug};
 
 /// Serializes or deserializes a known Elixir term to/from a known Rust value, asserts that the resulting is equivalent to known term/value.
 #[inline]
-pub fn test<'a>(env: Env<'a>, args: &[Term<'a>]) -> NifResult<Term<'a>> {
-    let test_type: &str = args[0].decode()?;
-    let test_name: &str = args[1].decode()?;
-    let expected_term = args[2];
+#[rustler::nif]
+pub fn test<'a>(env: Env<'a>, arg0: Term, arg1: Term, expected_term: Term<'a>) -> NifResult<Term<'a>> {
+    let test_type: &str = arg0.decode()?;
+    let test_name: &str = arg1.decode()?;
 
     macro_rules! run_test {
         ($actual:expr) => {

@@ -59,13 +59,21 @@ impl<'de, 'a: 'de> de::Deserializer<'de> for Deserializer<'a> {
                     visitor.visit_string(string)
                 }
             }
-            // i8, i16, i32, i64, u8, u16, u32, u64, f32, f64 (i128, u128)
-            TermType::Float | TermType::Integer => {
+            // i8, i16, i32, i64, u8, u16, u32, u64, (i128, u128)
+            TermType::Integer => {
                 try_parse_number!(self.term, u64, visitor, visit_u64);
                 try_parse_number!(self.term, i64, visitor, visit_i64);
-                try_parse_number!(self.term, f64, visitor, visit_f64);
 
-                Err(Error::ExpectedNumber)
+                Err(Error::ExpectedInteger)
+            }
+            // f32, f64
+            TermType::Float => {
+                try_parse_number!(self.term, f64, visitor, visit_f64);
+                // For NIF versions < 2.15, handle integers masquerading as floats
+                try_parse_number!(self.term, u64, visitor, visit_u64);
+                try_parse_number!(self.term, i64, visitor, visit_i64);
+
+                Err(Error::ExpectedFloat)
             }
             // char
             // string
@@ -384,14 +392,13 @@ impl<'de, 'a: 'de> de::Deserializer<'de> for Deserializer<'a> {
         V: Visitor<'de>,
     {
         use EnumDeserializerType as EnumType;
+        use TermType as TT;
 
         let variant: Option<(EnumType, Term<'a>)> = match self.term.get_type() {
             // unit variant
-            TermType::Atom => Some((EnumType::Unit, self.term)),
-            TermType::Binary => Some((EnumType::Unit, self.term)),
-            TermType::Integer | TermType::Float => Some((EnumType::Unit, self.term)),
+            TT::Atom | TT::Binary | TT::Integer | TT::Float => Some((EnumType::Unit, self.term)),
             // newtype or tuple variant
-            TermType::Tuple => {
+            TT::Tuple => {
                 let tuple = util::validate_tuple(self.term, None)?;
                 match tuple.len() {
                     0 | 1 => None,
@@ -400,7 +407,7 @@ impl<'de, 'a: 'de> de::Deserializer<'de> for Deserializer<'a> {
                 }
             }
             // struct variant
-            TermType::Map => {
+            TT::Map => {
                 let struct_name_term = util::validate_struct(&self.term, None)?;
                 Some((EnumType::Struct, struct_name_term))
             }
@@ -550,6 +557,7 @@ where
 
 /// EnumDeserializerType
 pub enum EnumDeserializerType {
+    #[allow(dead_code)]
     Any,
     Unit,
     Newtype,

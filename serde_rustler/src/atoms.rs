@@ -8,16 +8,16 @@ lazy_static! {
     pub static ref ERROR: String = String::from("Err");
 }
 
-rustler_atoms! {
-    atom nil;
-    atom ok;
-    atom error;
-    atom true_ = "true";
-    atom false_ = "false";
-    atom __struct__;
-    atom coef;
-    atom exp;
-    atom sign;
+atoms! {
+    nil,
+    ok,
+    error,
+    true_ = "true",
+    false_ = "false",
+    __struct__,
+    coef,
+    exp,
+    sign,
 }
 
 /**

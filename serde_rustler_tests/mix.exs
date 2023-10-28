@@ -15,7 +15,8 @@ defmodule SerdeRustlerTests.Mixfile do
   def project do
     in_production = Mix.env == :prod
 
-    [ app:                @name,
+    [
+      app:                @name,
       version:            @version,
       description:        @description,
       docs:               docs(),
@@ -29,8 +30,6 @@ defmodule SerdeRustlerTests.Mixfile do
       elixir:             "~> 1.8",
       build_embedded:     in_production,
       start_permanent:    in_production,
-      compilers:          [:rustler] ++ Mix.compilers(),
-      rustler_crates:     rustler_crates(),
     ]
   end
 
@@ -45,12 +44,14 @@ defmodule SerdeRustlerTests.Mixfile do
   end
 
   defp deps() do
-    [ {:rustler,        "~> 0.30.0"},
+    [
+      {:rustler,        "~> 0.30.0"},
     ]
   end
 
   defp dev_deps() do
-    [ {:benchee,          "~> 1.0",   only: [:bench]},
+    [
+      {:benchee,          "~> 1.0",   only: [:bench]},
       {:benchee_html,     "~> 1.0",   only: [:bench]},
       {:benchee_markdown, "~> 0.2",   only: [:bench]},
       {:credo,            "~> 1.0.0", only: [:dev, :test],  runtime: false},
@@ -60,7 +61,7 @@ defmodule SerdeRustlerTests.Mixfile do
       {:mix_test_watch,   "~> 0.8",   only: [:dev],         runtime: false},
       # JSON serialization libs for benchmarks
       {:exjsx,            "~> 4.0",   only: [:dev, :bench]},
-      {:jason,            "~> 1.1",   },
+      {:jason,            "~> 1.1"},
       {:jiffy,            "~> 1.0",   only: [:dev, :bench]},
       {:json,             "~> 1.3",   only: [:dev, :bench]},
       {:jsone,            "~> 1.4",   only: [:dev, :bench]},
@@ -69,22 +70,9 @@ defmodule SerdeRustlerTests.Mixfile do
     ]
   end
 
-  defp rustler_crates do
-    [ serde_rustler_tests:
-      [ path:             __DIR__ <> "/native/serde_rustler_tests",
-        mode:             rustler_mode(Mix.env()),
-        default_features: true,
-        features:         [],
-      ]
-    ]
-  end
-
-  defp rustler_mode(:bench), do: :release
-  defp rustler_mode(:prod), do: :release
-  defp rustler_mode(_), do: :debug
-
   defp package do
-    [ name:        @name,
+    [
+      name:        @name,
       files:       @files,
       maintainers: @maintainers,
       licenses:    @licenses,
@@ -95,7 +83,8 @@ defmodule SerdeRustlerTests.Mixfile do
   end
 
   defp docs do
-    [ main:       "readme",
+    [
+      main:       "readme",
       source_url: @github,
       extras:     ["README.md"],
     ]
